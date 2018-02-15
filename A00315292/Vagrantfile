@@ -4,22 +4,15 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.ssh.insert_key = false
-  config.vm.define :centos_1 do |node1|
-    node1.vm.box = "centos1706_v0.2.0"
-    node1.vm.network :private_network, ip: "192.168.56.101"
-    node1.vm.network "public_network", bridge: "eno1", ip:"192.168.131.121", netmask: "255.255.255.0"
-    node1.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "1024","--cpus", "1", "--name", "centos_1" ]
+   config.vm.define :centos_server do |server|
+    server.vm.box = "centos_rabbit"
+    #server.vm.network :private_network, ip: "192.168.56.101"
+    server.vm.network "public_network", bridge: "eno1", ip:"192.168.131.125", netmask: "255.255.255.0"
+    server.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024","--cpus", "1", "--name", "centos_server2" ]
     end
-    node1.vm.provision "shell", path: "server.sh"
-  end
-  config.vm.define :centos_2 do |node2|
-    node2.vm.box = "centos1706_v0.2.0"
-    node2.vm.network :private_network, ip: "192.168.56.102"
-    node2.vm.network "public_network", bridge: "eno1", ip:"192.168.131.122", netmask: "255.255.255.0"
-    node2.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "1024","--cpus", "1", "--name", "centos_2" ]
-    end
+    server.vm.provision "shell", path: "server.sh"
   end
 end
+
+
